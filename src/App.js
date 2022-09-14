@@ -26,6 +26,7 @@ function App() {
   const [bestResult, setBestResult] = useState(0)
   const [firstChoice, setFirstChoice] = useState(null)
   const [secondChoice, setSecondChoice] = useState(null)
+  const [disabled, setDisabled] = useState(false)
 
   const duplicateAndShuffleCards = () => {
     const shuffledCards = [...cardImages, ...cardImages]
@@ -45,6 +46,7 @@ function App() {
   //compare choices and set matched property
   useEffect(() => {
     if (firstChoice && secondChoice) {
+      setDisabled(true)
 
       if (firstChoice.src === secondChoice.src) {
         setCards(prevCards => {
@@ -69,6 +71,7 @@ function App() {
     setFirstChoice(null)
     setSecondChoice(null)
     setTurns(prevTurns =>  prevTurns + 1)
+    setDisabled(false)
   }
 
   const updateBestResult = () => {
@@ -87,7 +90,7 @@ function App() {
     if (cards.every((card => card.matched))) {
       updateBestResult()
     }
-  }, [cards])
+  }, [cards])// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="App">
@@ -100,6 +103,7 @@ function App() {
             card={card} 
             handleChoice={handleChoice}
             flipped={ card === firstChoice || card === secondChoice || card.matched }
+            disabled={disabled}
           />
         )
         )}
